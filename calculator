@@ -1,0 +1,286 @@
+import numpy as np
+from matplotlib import pyplot as plt
+#QUESTION 1
+#PART A
+class polynomial:
+’’’Class to represent Polynomials as list(s) of their coefficients.’’’
+def __init__(self, List):
+’’’Constructor for the Polynomial class recieving a list of coefficients as inputs.’’’
+self.coefficients = List #Creates a data attribute named coefficients containing the
+,→ list of coefficients
+assert type(self.coefficients) == list, ’Error: No list provided.’ #Checking that the
+,→ input is in list format.
+if len(self.coefficients) == 0: #Checking if the list is null.
+self.coefficients = [0] #If list is null/empty, replace it with a list containing a
+,→ single element, equal to zero.
+while self.coefficients[-1] == 0 and len(self.coefficients) > 1: #Removes all zero
+elements from the end of the list until the last element of the list is non-zero,
+or the list only contains a zero
+,→
+,→
+self.coefficients.pop(-1) #pop() function removes a given element from a list. In
+,→ this case it removes the last element from the list.
+for variables in self.coefficients:
+assert type(variables) == int or type(variables) == float, ’Error: List contains
+unregognised element(s). Valid elements include integer and float values.’
+#Checking elements individually to ensure they valid int and float inputs.
+,→
+,→
+self.degree = len(self.coefficients) - 1# Creates a data attribute named degree
+containing the degree of the represented polynomial, based on the provided list of
+coefficients, after trailing zeros removed via the pop() function.
+,→
+,→
+if self.degree < 0 : #Ensuring that the degree is always 0 or larger.
+self.degree == 0
+#PART B
+def __str__(self):
+’’’Constructor for the Polynomial class, returning a printed message in str format
+,→ "Polynomial of degree 2: 1 + 2 x^1 + 3 x^2". ’’’
+plus = ’’ #Creating an empty string to call in the loop.
+for y in range(len(self.coefficients)): #Coefficient loop.
+if y != 0:
+plus = plus + ’ + ’ #Addition of a plus to each element.
+plus = plus + str(self.coefficients[y]) #Addition of the coefficients.
+1
+if y > 0:
+plus = plus + ’x^’ +str(y) #Addition of "x & to the power" symbols.
+return ’Polynomial of degree ’ + str(self.degree) + ’: ’ + plus #Summation of return
+,→ message. # needs work but functions perfectly.
+#PART C
+def __call__(self,x):
+’’’Constructor for the Polynomial class, returning the evaluated polynomial as a
+,→ numeric value for a given number or array. ’’’
+self.x = x
+assert type(x) == int or type(x) == float or type(x) == np.ndarray, ’Error: List
+contains unregognised element(s).’ #Ensure input argument of type int, float or
+numpy.ndarray
+,→
+,→
+z = -0 #Generate a generalised variable to append later.
+y = 0 #Describes the power of the element.
+lst = [] #Generates an empty list.
+for i in self.coefficients: #Evaluates the polynomial represented by the object using
+the provided input, by evaluating each term & multiplying coefficients with
+variable to the power of the current y value & add to lst.
+,→
+,→
+z = i*(x**y)
+lst.append(z)
+y = y + 1
+return sum(lst) #Returns summation of lst.
+#PART D
+def plot(self,limits):
+’’’Constructor for the Polynomial class, a method named "plot" to plot the polynomial
+,→ for a given interval, with two given limits. ’’’
+self.limits = limits
+assert type(self.limits) == list, ’Error: Limits not provided in list format.’
+,→ #Checking that the input is in list format.
+assert len(self.limits) == 2, ’Error: The list must contain only two boundaries. ’
+,→ #Checking that the input has two values.
+assert type(self.limits[0]) == float or type(self.limits[0]) == int, ’Error: Initial
+value is not of int or float format.’ #Checking that the initial values 0/1 is in
+int/float format.
+,→
+,→
+assert type(self.limits[1]) == float or type(self.limits[1]) == int, ’Error: Final
+value is not of int or float format.’ #Checking that the final values 0/1 is in
+int/float format.
+,→
+,→
+x = np.linspace(self.limits[0], self.limits[1], 1001) #Creates a numpy array containing
+,→ 1001 numbers, evenly distributed in the interval defined by the input argument.
+y = self.__call__(x) #Makes the y values a function of each element.
+plt.plot(x, y)#Plots the graph. Displaying graph not nesessary here otherwise add,
+,→ plt.figure+legend+show.
+#PART E
+def __add__(self, other): #Other refers to the "other" polynomial. I.e the original + the
+,→ "other".
+’’’Constructor for the Polynomial class, an addition method for two polynomial objects
+,→ yielding a new polynomial object representing its sum. ’’’
+highest_degree = max(self.degree, other.degree) #Determines the instance with the
+,→ highest degree using max().
+all(other.coefficients.append(0) for i in range(highest_degree - other.degree))
+#Appends zeros at the end of the coefficient list of the object with the lower
+degree to match the sizes of the lists.
+,→
+,→
+all(self.coefficients.append(0) for i in range(highest_degree - self.degree))
+2
+return polynomial([self.coefficients[i] + other.coefficients[i] for i in
+range(highest_degree + 1)]) #Returns a new polynomial object, with respect to the
+polynomial class, representing the sum of the two polynomials.
+,→
+,→
+def __sub__(self, other): #Other refers to the "other" polynomial. I.e the original - the
+,→ "other".
+’’’Constructor for the Polynomial class, a subtraction method for two polynomial
+,→ objects yielding a new polynomial object representing its difference. ’’’
+highest_degree = max(self.degree, other.degree) #Determines the instance with the
+,→ highest degree using max().
+all(other.coefficients.append(0) for i in range(highest_degree - other.degree))
+#Appends zeros at the end of the coefficient list of the object with the lower
+degree to match the sizes of the lists.
+,→
+,→
+all(self.coefficients.append(0) for i in range(highest_degree - self.degree))
+return polynomial([self.coefficients[i] - other.coefficients[i] for i in
+range(highest_degree + 1)]) #Returns a new polynomial object, with respect to the
+polynomial class, representing the difference of the two polynomials.
+,→
+,→
+#PART F
+def __mul__(self, other): #Other refers to the "other" polynomial. I.e the original *
+,→ (multiply) the "other".
+’’’Constructor for the Polynomial class, a multiplication method for two polynomial
+,→ objects yielding a new polynomial object representing its product. ’’’
+new_polynomial = []
+for i in range((self.degree + other.degree) + 1):
+z = 0 #Generate generalised variable to append later.
+for y in self.coefficients:
+for x in other.coefficients: #This combination of for loops and an if statement
+ensures that both polynomials have each element multiplied individually all
+the way through, until the lists have been evaluated i times.
+,→
+,→
+if self.coefficients.index(y) + other.coefficients.index(x) == i:
+z = z + y*x #Multiplies the two polynomial objects and adds it to 0.
+new_polynomial.append(z) #Adding z to new_polynomial to keep list format before
+,→ returning new_polynomial.
+return polynomial(new_polynomial)#Returns the answer with respect to the polynomial
+,→ class.
+#PART G
+def Euclid(self, other): #Other refers to the "other" polynomial. I.e the original /
+,→ (divided by) the "other".
+’’’Constructor for the Polynomial class, a Euclidean division method for
+,→ polynomials. ’’’
+assert other.degree > 0, "Error: The degree of the second polynomial must be higher
+,→ than 0."
+numerator = self.coefficients #Setting numerator equal to "original" value of
+,→ coefficients.
+denominator = other.coefficients #Setting denominator equal to "other" value of
+,→ coefficients.
+r = numerator #Setting the remainder (r) equal to the numerator.
+answer = [] #Generating an empty list containing the answer, seperate from the
+,→ remainder.
+i = self.degree
+while i > other.degree - 1: #If numerator>denominator, the while loop begins.
+answer.insert(0, r[-1] / denominator[-1]) #Inserts elements into answer.
+take_away = [answer[0] * i for i in denominator]
+if len(r) - 1 == other.degree: #If remainder-1 = the degree of the second
+,→ polynomial, r is calculated.
+3
+r = [r[i] - take_away[i] for i in range(other.degree)] #Equation from
+,→ question worksheet.
+else: #In any other case, r is calculated.
+r = [r[i + self.degree - other.degree] - take_away[i] for i in
+range(other.degree)] #the i in range of other.degree ensures that the
+"other" polynomial is individually processed.
+,→
+,→
+i = i - 1
+if i - other.degree >= 0:
+r.insert(0, (numerator[i - other.degree])) #Inserting elements into r.
+return polynomial(answer), polynomial(r) #Returns the answer and remainder with
+,→ respect to the polynomial class.
+#PART H
+def derivative(self):
+’’’Constructor for the Polynomial class, a method to compute the derivative of the
+,→ represented polynomial. ’’’
+return polynomial([self.coefficients[i] * i for i in range(1, self.degree + 1)])
+#Returns the derivative of the original polynomial, with respect to the Polynomial
+class.
+,→
+,→
+#PART I
+def integral(self, lower_bound=None, upper_bound=None): #The integral recieves two numbers
+as input arguments, representing the integration limits for the polynomial. Both of
+these arguments have None as a default value.
+,→
+,→
+’’’Constructor for the Polynomial class, a method to compute the definite/indefinite
+,→ integral of the polynomial. ’’’
+integral = [self.coefficients[i] / (i+1) for i in range(self.degree + 1)] #Computes the
+,→ integral
+integral.insert(0, 0) #Creates a list of two numbers, placeholders for upper and lower
+,→ bounds.
+new_polynomial = polynomial(integral) #Evaluates integral with respect to polynomial
+,→ class.
+if lower_bound or upper_bound is None:
+return new_polynomial #returns a polynomial object representing the integral of the
+,→ original object.
+else:
+return new_polynomial(upper_bound) - new_polynomial(lower_bound) #Else evaluates
+,→ the integral at its integration limits.
+#QUESTION 2
+from scipy.integrate import quad
+from math import factorial, exp
+def testPolynomialIntegralValues(self):
+’’’A function for olynomial objects representing polynomials, whose coefficients are
+,→ derived based on the following formula: c = 1/i! .’’’
+for i in range(11): #Polynomials should be generated for all degrees between 0 and 10
+coefficients = [1 / factorial(n) for n in range(i+1)] #Creating polynomial with
+,→ coefficients derived from the formula c = 1/i!, for any degree polynomial.
+actual_polynomial = polynomial(coefficients) #Evaluating new coefficients with respect
+,→ to polynomial class.
+spicy_integral = quad(actual_polynomial, 0,1) #Integration using spicy module.
+actual_polynomial_integral = actual_polynomial.integral(0,1) #Integration using the
+,→ Polynomial class.
+assert abs(spicy_integral - actual_polynomial_integral) <= 0.01*spicy_integral, f"The
+integrals of degree {i} are not accurate within 0.1% of eachother." #Assertion
+message if integrals are not within 0.1% of eachother.
+,→
+,→
+4
+assert abs(spicy_integral - (exp(1) - 1)) <= 0.01, f"The Integrals of degree {i} does
+,→ not converge to e-1." #Checking if the integrals converge to e-1. exp = e.
+#QUESTION 3
+from scipy.integrate import odeint
+def solveEquation():
+’’’’A function named solvedEquation solves the equation # + # + 3# + 2# 2 = 0, with the
+initial condition #(0) = #1 using odeint for 1001 points, uniformly distributed in the
+interval [0,1].’’’
+,→
+,→
+initial_condition = -1 # Defines the inital condition, (given as -1).
+def differential_equation(y, x): #Defines a function with variables y and x.
+return -y-3*x-2*x**2 #Returns the equation where y0 (initial condition) = -1.
+array = np.linspace(0, 1, 1001) #Defines the points in an array using linspace, where the
+,→ solution is evaluated at these points.
+solved_equation = odeint(differential_equation, initial_condition, array) #Solves the
+,→ differential equation using odeint from the scipy module, with given conditions.
+solved_equation = solved_equation.flatten() #instead of using np.ndarray, use flatten to
+create a 1-D array (same as ndarray). The maximum supported dimension for an ndarray is
+32, there is 1001 values of y.
+,→
+,→
+return array, solved_equation #Returns the array and solved differential equation.
+def verifySolution(px):
+’’’ A function that verifies that a given polynomial p(x) is a solution of the
+,→ equation.’’’
+assert isinstance(px, polynomial), "Error: Input argument is not a polynomial object."
+#Checks if px is of instance (is the same class as) the polynomial class. Asserts a
+message if not.
+,→
+,→
+y,x = solveEquation() #Calls the solveEquation function to obtain the solution of the
+,→ equation, and the array of 1001 points.
+evaluated_array = px(x) #Evaluates the provided polynomial for the points used for the
+,→ solution.
+#Plots the solution and the evaluated polynomial.
+plt.figure(figsize=(20,10)) #Sets the figure size to a 2:1 ratio (landscape).
+plt.plot(x, y, label=’Differential equation solution.’), plt.plot(x, evaluated_array,
+label=’Polynomial evaluated across 1001 points.’) #Adds labels to the graph to display
+solution to differential equation and the evaluated polynomial.
+,→
+,→
+plt.legend() #Adds a legend to the top right of the plot, showing the labels.
+plt.show() #Shows the graph.
+rx = px.derivative()+px+polynomial([0,3,2]) #Defines r(x) as the a complete polynomial in
+,→ the accepted form of the polynomial class.
+#Plots r(x)
+plt.figure(figsize=(20,10)) #Sets the figure size to a 2:1 ratio (landscape).
+plt.plot(x, rx(x), label=’r(x)’) #Adds a label to the legend named rx.
+plt.legend() #Adds a legend to the top right of the plot, showing the labels.
+plt.show() #Shows the graph.
+return rx #returns r(x)

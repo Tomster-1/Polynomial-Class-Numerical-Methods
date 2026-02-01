@@ -1,4 +1,4 @@
-This repository contains a full Python solution for ENG1002 Term 2 coursework, implementing a custom Polynomial class from first principles. The project covers object-oriented programming, numerical methods, and scientific computing using NumPy, SciPy, and Matplotlib.
+This repository contains a full Python solution, implementing a custom Polynomial class from first principles. The project covers object-oriented programming, numerical methods, and scientific computing using NumPy, SciPy, and Matplotlib.
 
 Key features include:
 
